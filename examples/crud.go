@@ -124,6 +124,8 @@ func UpdateArticle(writer http.ResponseWriter, requestPtr *http.Request) {
 		err := ErrorMessage{Message: "Not found article with that ID. Try use POST first"}
 		json.NewEncoder(writer).Encode(err)
 	}
+	/** TEST **/
+	fmt.Println(Articles)
 }
 
 func main() {
