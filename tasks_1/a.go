@@ -3,12 +3,12 @@ package main
 import "fmt"
 
 func main() {
-	var (
-		one int
-		two int
-	)
-	fmt.Scan(&one)
-	fmt.Scan(&two)
+	var weight int
+	fmt.Scan(&weight)
 
-	fmt.Println((one + two) * (one + two))
+	if weight != 2 && weight%2 == 0 {
+		fmt.Print("YES")
+	} else {
+		fmt.Print("NO")
+	}
 }
