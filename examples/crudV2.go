@@ -9,6 +9,7 @@ import (
 	"net/http"
 )
 
+// Article struct
 type Article struct {
 	Id      string `json:"Id"`
 	Title   string `json:"Title"`
@@ -16,6 +17,7 @@ type Article struct {
 	Content string `json:"Content"`
 }
 
+// ErrorMessage struct
 type ErrorMessage struct {
 	Message string `json:"Message"`
 }
@@ -32,7 +34,7 @@ var Articles = []Article{
  */
 func ShowArticles(writer http.ResponseWriter, requestPtr *http.Request) {
 	fmt.Println("Hint: ShowAllArticles worked...")
-	json.NewEncoder(writer).Encode(Articles)
+	json.NewEncoder(writer).Encode(Articles) // пишем в Response все Articles в виде JSON
 	/** TEST **/
 	fmt.Println(Articles)
 }
