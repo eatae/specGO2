@@ -81,7 +81,7 @@ func CreateArticle(writer http.ResponseWriter, requestPtr *http.Request) {
 	/* add Article in DB*/
 	Articles = append(Articles, article)
 	/* return new Article */
-	json.NewEncoder(writer).Encode(article)
+	json.NewEncoder(writer).Encode(article.Id)
 	/** TEST **/
 	fmt.Println(Articles)
 }
@@ -147,5 +147,5 @@ func main() {
 	router.HandleFunc("/article/{id}", UpdateArticle).Methods("PUT")
 
 	/* serve */
-	log.Fatal(http.ListenAndServe(":8000", router))
+	log.Fatal(http.ListenAndServe(":8050", router))
 }
