@@ -34,9 +34,10 @@ var Articles = []Article{
  */
 func ShowArticles(writer http.ResponseWriter, requestPtr *http.Request) {
 	fmt.Println("Hint: ShowAllArticles worked...")
+	writer.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(writer).Encode(Articles) // пишем в Response все Articles в виде JSON
 	/** TEST **/
-	fmt.Println(Articles)
+	//fmt.Println(Articles)
 }
 
 /**
@@ -55,6 +56,7 @@ func ShowArticleById(writer http.ResponseWriter, requestPtr *http.Request) {
 	}
 	if !find {
 		var err = ErrorMessage{Message: "Not found article with that ID"}
+		writer.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(writer).Encode(err)
 	}
 	/** TEST **/
@@ -78,9 +80,10 @@ func CreateArticle(writer http.ResponseWriter, requestPtr *http.Request) {
 	reqBody, _ := ioutil.ReadAll(requestPtr.Body)
 	var article Article
 	json.Unmarshal(reqBody, &article)
-	/* add Article in DB*/
+	/* add Article in DB */
 	Articles = append(Articles, article)
 	/* return new Article */
+	writer.WriteHeader(http.StatusCreated)
 	json.NewEncoder(writer).Encode(article.Id)
 	/** TEST **/
 	fmt.Println(Articles)
@@ -93,13 +96,19 @@ func CreateArticle(writer http.ResponseWriter, requestPtr *http.Request) {
  */
 func DeleteArticle(writer http.ResponseWriter, requestPtr *http.Request) {
 	vars := mux.Vars(requestPtr)
+	find := false
 	for index, article := range Articles {
 		if article.Id == vars["id"] {
+			find = true
+			writer.WriteHeader(http.StatusAccepted)
 			Articles = append(Articles[:index], Articles[index+1:]...)
 		}
 	}
-	/** TEST **/
-	fmt.Println(Articles)
+	if !find {
+		var err = ErrorMessage{Message: "Not found article for delete with that ID"}
+		writer.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(writer).Encode(err)
+	}
 }
 
 /**
@@ -126,7 +135,7 @@ func UpdateArticle(writer http.ResponseWriter, requestPtr *http.Request) {
 		err := ErrorMessage{Message: "Not found article with that ID. Try use POST first"}
 		json.NewEncoder(writer).Encode(err)
 	}
-	/** TEST **/
+	/**** TEST ****/
 	fmt.Println(Articles)
 }
 
