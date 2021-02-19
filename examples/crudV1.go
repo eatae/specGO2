@@ -11,8 +11,6 @@ import (
 func HomePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "<h1>Welcome to Home Page RESTAPI</h1>")
 	dump, _ := httputil.DumpRequest(r, true)
-	w.Write()
-
 	fmt.Fprintf(w, "<pre>")
 	fmt.Fprintf(w, "%q", dump)
 	fmt.Fprintf(w, "</pre>")
@@ -30,4 +28,5 @@ func main() {
 	http.HandleFunc("/", HomePage)
 	// start serve
 	log.Fatal(http.ListenAndServe(":8050", nil))
+	fmt.Println("----Stop----")
 }
