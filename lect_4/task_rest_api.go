@@ -12,10 +12,10 @@ import (
 
 // Article struct
 type Product struct {
-	Id      int `json:"id"`
-	Item   	string `json:"item"`
-	Amount  int `json:"amount"`
-	Price 	string `json:"price"`
+	Id     int    `json:"id"`
+	Item   string `json:"item"`
+	Amount int    `json:"amount"`
+	Price  string `json:"price"`
 }
 
 // ErrorMessage struct
@@ -35,6 +35,11 @@ var productStore = []Product{
  */
 func ShowProducts(response http.ResponseWriter, request *http.Request) {
 	fmt.Println("Hint: ShowAllProducts worked...")
+	if len(productStore) < 1 {
+		response.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(response).Encode(ErrorMessage{Message: "Not found, Products is empty."})
+		return
+	}
 	response.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(response).Encode(productStore) // пишем в Response все Products
 	/** TEST **/
@@ -77,11 +82,11 @@ func ShowProductById(response http.ResponseWriter, request *http.Request) {
  */
 func CreateProduct(response http.ResponseWriter, request *http.Request) {
 	/*{
-			Id: 3,
-			Item: "Steel chair",
-			Amount: 10,
-			Price: "8"
-		}
+		Id: 3,
+		Item: "Steel chair",
+		Amount: 10,
+		Price: "8"
+	}
 	*/
 	reqBody, _ := ioutil.ReadAll(request.Body)
 	var product Product
@@ -140,7 +145,7 @@ func UpdateProduct(response http.ResponseWriter, request *http.Request) {
 		if product.Id == innerId {
 			find = true
 			reqBody, _ := ioutil.ReadAll(request.Body)
-			response.WriteHeader(http.StatusAccepted) // Изменяем статус код на 202
+			response.WriteHeader(http.StatusAccepted)     // Изменяем статус код на 202
 			json.Unmarshal(reqBody, &productStore[index]) // перезаписываем всю информацию для статьи с Id
 		}
 	}
@@ -153,7 +158,6 @@ func UpdateProduct(response http.ResponseWriter, request *http.Request) {
 	/**** TEST ****/
 	fmt.Println(productStore)
 }
-
 
 func main() {
 	fmt.Println("REST API V2.0 worked....")
