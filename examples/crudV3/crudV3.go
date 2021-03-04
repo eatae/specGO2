@@ -48,6 +48,7 @@ func ShowArticles(writer http.ResponseWriter, requestPtr *http.Request) {
 func ShowArticleById(writer http.ResponseWriter, requestPtr *http.Request) {
 	vars := mux.Vars(requestPtr)
 	find := false
+
 	for _, article := range Articles {
 		if article.Id == vars["id"] {
 			find = true
@@ -60,7 +61,7 @@ func ShowArticleById(writer http.ResponseWriter, requestPtr *http.Request) {
 		json.NewEncoder(writer).Encode(err)
 	}
 	/** TEST **/
-	fmt.Println(Articles)
+	//fmt.Println(Articles)
 }
 
 /**

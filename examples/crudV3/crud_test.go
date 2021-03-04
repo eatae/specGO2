@@ -12,20 +12,20 @@ func TestShowArticles(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	recorder := httptest.NewRecorder()			// рекордер
-	handler := http.HandlerFunc(ShowArticles)	// функция которую будем тестировать
-	handler.ServeHTTP(recorder, request)		// записываем в рекордер ответ API
+	recorder := httptest.NewRecorder()        // рекордер
+	handler := http.HandlerFunc(ShowArticles) // функция которую будем тестировать
+	handler.ServeHTTP(recorder, request)      // записываем в рекордер ответ API
 
 	/* check status code */
 	if status := recorder.Code; status != http.StatusOK {
 		t.Errorf("handler returned wrong status code: got %v want %v",
 			status, http.StatusOK)
 	}
-
-	/* check answer (только если данные не динамичны) */
-	expectedAnswer := `[{"id":1,"item":"Wood chair","amount":8,"price":"12"},{"id":2,"item":"Red-wood table","amount":4,"price":"26"}]`
+	/* check answer (только если данные не динамичны, в ответе присутствует перенос строки) */
+	expectedAnswer := `[{"Id":"1","Title":"First title","Author":"First author","Content":"First content"},{"Id":"2","Title":"Second title","Author":"Second author","Content":"Second content"}]
+`
 	if recorder.Body.String() != expectedAnswer {
-		t.Error("wrong answer")
+		t.Error("Request body does not match expectedAnswers")
 	}
 }
 
@@ -35,9 +35,9 @@ func TestShowArticleById(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	query := request.URL.Query()			// создаём параметры запроса
-	query.Add("id", "1")			// записываем значение параметра
-	request.URL.RawQuery = query.Encode()	// добавляем парметры к запросу
+	query := request.URL.Query()          // создаём параметры запроса
+	query.Add("id", "1")                  // записываем значение параметра
+	request.URL.RawQuery = query.Encode() // добавляем парметры к запросу
 
 	recorder := httptest.NewRecorder()
 	handler := http.HandlerFunc(ShowArticleById)
@@ -49,5 +49,3 @@ func TestShowArticleById(t *testing.T) {
 			status, http.StatusOK)
 	}
 }
-
-
