@@ -1,0 +1,263 @@
+{
+	"info": {
+		"_postman_id": "db0fb0d3-a7aa-4c19-a844-1f94f08bc5f4",
+		"name": "crudV3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "articles",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8050/articles",
+					"host": [
+						"localhost"
+					],
+					"port": "8050",
+					"path": [
+						"articles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "article",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8050/article/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8050",
+					"path": [
+						"article",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "article_10",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8050/article/10",
+					"host": [
+						"localhost"
+					],
+					"port": "8050",
+					"path": [
+						"article",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create_3",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Id\": \"3\",\n    \"Title\": \"Title from json POST method\",\n    \"Author\": \"Any Name\",\n    \"Content\": \"Content from json POST method\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8050/article",
+					"host": [
+						"localhost"
+					],
+					"port": "8050",
+					"path": [
+						"article"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create_4",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Id\": \"4\",\n    \"Title\": \"Title 4 from json POST method\",\n    \"Author\": \"Any Name 4\",\n    \"Content\": \"Content from json POST method\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8050/article",
+					"host": [
+						"localhost"
+					],
+					"port": "8050",
+					"path": [
+						"article"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create_5",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Id\": \"5\",\n    \"Title\": \"Title 5 from json POST method\",\n    \"Author\": \"Any Name 5\",\n    \"Content\": \"Content from json POST method\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8050/article",
+					"host": [
+						"localhost"
+					],
+					"port": "8050",
+					"path": [
+						"article"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete_3",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8050/article/3",
+					"host": [
+						"localhost"
+					],
+					"port": "8050",
+					"path": [
+						"article",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete_4",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8050/article/4",
+					"host": [
+						"localhost"
+					],
+					"port": "8050",
+					"path": [
+						"article",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update_2",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Id\": \"2\",\n    \"Title\": \"Title from Update JSON\",\n    \"Author\": \"Any Name Update JSON\",\n    \"Content\": \"Content from UPDATE JSON\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8050/article/2",
+					"host": [
+						"localhost"
+					],
+					"port": "8050",
+					"path": [
+						"article",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update_3",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Id\": \"3\",\n    \"Title\": \"Title 3 from Update JSON\",\n    \"Author\": \"Any Name 3 Update JSON\",\n    \"Content\": \"Content 3 from UPDATE JSON\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8050/article/3",
+					"host": [
+						"localhost"
+					],
+					"port": "8050",
+					"path": [
+						"article",
+						"3"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "000532a2-8c37-4fae-8eaf-b155ab587910",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "11d4f754-8cb9-42c5-8027-ec4e47d1200c",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -47,24 +47,45 @@ var Users = []User{
 
 /**
  * Get Token
- * request: GET
+ * request: POST
  */
 func GetToken(writer http.ResponseWriter, requestPtr *http.Request) {
-	// создаём токен
-	token := jwt.New(jwt.SigningMethodHS256)
-	// claims - нужен для конфигурации токена
-	claims := token.Claims.(jwt.MapClaims)
-	claims["admin"] = true
-	claims["name"] = "New User"
-	// время существования токена
-	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
-	// получаем токен
-	tokenString, err := token.SignedString(JWTSecretKey)
-	if err != nil {
-		log.Fatal(err)
+	// получаем данные пользователя из запроса
+	reqBody, _ := ioutil.ReadAll(requestPtr.Body)
+	var innerUser User
+	// инициализируем пользователя
+	json.Unmarshal(reqBody, &innerUser)
+
+	// ищем пользователя
+	for _, user := range Users {
+		/*
+		 * если находим - передаём токен
+		 */
+		if innerUser.Login == user.Login && innerUser.Password == user.Password {
+			// создаём токен
+			token := jwt.New(jwt.SigningMethodHS256)
+			// claims - нужен для конфигурации токена
+			claims := token.Claims.(jwt.MapClaims)
+			claims["admin"] = true
+			claims["name"] = "New User"
+			// время существования токена
+			claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+			// получаем токен
+			tokenString, err := token.SignedString(JWTSecretKey)
+			if err != nil {
+				log.Fatal(err)
+			}
+			// отправляем пользователю
+			writer.Write([]byte(tokenString))
+			return
+		}
 	}
-	// отправляем пользователю
-	writer.Write([]byte(tokenString))
+
+	/*
+	 * Если не найден - отвечаем Unauthorize
+	 */
+	writer.WriteHeader(http.StatusUnauthorized)
+	writer.Write([]byte("User is not Found."))
 }
 
 /* token Validator (middleware)
@@ -195,7 +216,7 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 
 	/* get token */
-	router.HandleFunc("/auth", GetToken).Methods("GET")
+	router.HandleFunc("/auth", GetToken).Methods("POST")
 
 	/* show all */
 	router.HandleFunc("/articles", ShowArticles).Methods("GET")
