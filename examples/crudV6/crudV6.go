@@ -1,11 +1,13 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	jwtmiddleware "github.com/auth0/go-jwt-middleware"
 	"github.com/form3tech-oss/jwt-go"
 	"github.com/gorilla/mux"
+	_ "github.com/lib/pq"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -32,6 +34,27 @@ var Articles = []Article{
 }
 
 
+/* Postgres settings */
+type DbConf struct {
+	Port string
+	User string
+	Password string
+	DBname string
+	SSlmode string
+}
+
+var pgConf = DbConf{
+	Port: "54320",
+	User: "postgres",
+	Password: "2222",
+	DBname: "specgo",
+	SSlmode: "disable",
+}
+
+var connectStr = fmt.Sprintf("user=%v password=%v port= %v dbname=%v sslmode=%v",
+	pgConf.User, pgConf.Password, pgConf.Port, pgConf.DBname, pgConf.SSlmode)
+
+
 
 // User struct
 type User struct {
@@ -51,11 +74,67 @@ var Users = []User{
 var JWTSecretKey = []byte("secret")
 
 
+func Test(writer http.ResponseWriter, request *http.Request) {
+	db, err := sql.Open("postgres", connectStr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM users")
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		user := User{}
+		err := rows.Scan(&user.Id, &user.Login, &user.Password)
+		if err != nil{
+			fmt.Println(err)
+			continue
+		}
+		fmt.Println(user)
+	}
+}
+
+
+/* Insert User */
+func InsertUser(innerUser User) {
+	db, err := sql.Open("postgres", connectStr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	_, err = db.Exec("INSERT INTO users (login, password) VALUES ($1, $2)",
+		innerUser.Login, innerUser.Password)
+	if err != nil {
+		fmt.Println(err)
+		log.Fatal(err)
+	}
+}
+
+
 /**
  * Register
  * request: POST
  */
-func Register(writer http.ResponseWriter, request *http.Request) {
+func Register (writer http.ResponseWriter, request *http.Request) {
+	reqBody, _ := ioutil.ReadAll(request.Body)
+	var innerUser User
+	json.Unmarshal(reqBody, &innerUser)
+	InsertUser(innerUser)
+
+	writer.WriteHeader(http.StatusOK)
+	writer.Write([]byte("User registered."))
+}
+
+/**
+ * Register
+ * request: POST
+ */
+/*func Register(writer http.ResponseWriter, request *http.Request) {
 	// данные пользователя
 	reqBody, _ :=  ioutil.ReadAll(request.Body)
 	var innerUser User
@@ -78,7 +157,7 @@ func Register(writer http.ResponseWriter, request *http.Request) {
 	Users = append(Users, innerUser)
 	writer.WriteHeader(http.StatusOK)
 	writer.Write([]byte("User registered."))
-}
+}*/
 
 /**
  * Get Token
@@ -291,6 +370,10 @@ func main() {
 
 	/* update */
 	router.HandleFunc("/article/{id}", UpdateArticle).Methods("PUT")
+
+
+	/* test */
+	router.HandleFunc("/test", Test).Methods("GET")
 
 	/* serve */
 	log.Fatal(http.ListenAndServe(":8050", router))
