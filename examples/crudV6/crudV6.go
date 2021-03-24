@@ -310,6 +310,7 @@ func DeleteArticle(writer http.ResponseWriter, requestPtr *http.Request) {
 		return
 	}
 
+	writer.WriteHeader(http.StatusAccepted)
 	resMsg.setSuccess("Article successfully deleted.")
 	json.NewEncoder(writer).Encode(resMsg)
 }
@@ -396,7 +397,6 @@ func Test3(writer http.ResponseWriter, request *http.Request) {
 func main() {
 
 	fmt.Println("REST API V2.0 worked....")
-
 	// open DB connect
 	db, err := sql.Open("postgres", connectStr)
 	if err != nil {
