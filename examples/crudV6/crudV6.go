@@ -151,7 +151,7 @@ func Register(writer http.ResponseWriter, request *http.Request) {
 	json.NewEncoder(writer).Encode(resMsg)
 }
 
-// Get Token User
+// GetToken User
 //
 // request: POST
 func GetToken(writer http.ResponseWriter, requestPtr *http.Request) {

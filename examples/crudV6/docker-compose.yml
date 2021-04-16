@@ -1,0 +1,23 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    container_name: specGo2_crudV6
+    restart: unless-stopped
+    ports:
+      - "54322:5432"
+    environment:
+      POSTGRES_PASSWORD: 2222
+
+  adminer:
+    image: adminer
+    container_name: specGo2_crudV6_adminer
+    restart: unless-stopped
+    ports:
+      - 8099:8080
