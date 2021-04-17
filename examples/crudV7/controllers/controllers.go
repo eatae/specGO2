@@ -27,7 +27,7 @@ func GetUsers(context *gin.Context) {
 func GetUserById(context *gin.Context) {
 	id := context.Params.ByName("id")
 	var user models.User
-	err := models.GetUserById(&user)
+	err := models.GetUserById(&user, id)
 	if err != nil {
 		context.AbortWithStatus(http.StatusNotFound)
 	} else {
@@ -54,7 +54,19 @@ func CreateUser(context *gin.Context) {
 //
 // method:PUT
 func UpdateUser(context *gin.Context) {
-
+	var user models.User
+	id := context.Params.ByName("id")
+	err := models.GetUserById(&user, id)
+	if err != nil {
+		context.JSON(http.StatusNotFound, user)
+	}
+	context.BindJSON(&user)
+	err = models.UpdateUser(&user, id)
+	if err != nil {
+		context.AbortWithStatus(http.StatusNotFound)
+	} else {
+		context.JSON(http.StatusOK, user)
+	}
 }
 
 // DeleteUser
@@ -62,5 +74,12 @@ func UpdateUser(context *gin.Context) {
 // method:DELETE
 // param: id
 func DeleteUser(context *gin.Context) {
-
+	var user models.User
+	id := context.Params.ByName("id")
+	err := models.UserDelete(&user, id)
+	if err != nil {
+		context.AbortWithStatus(http.StatusNotFound)
+	} else {
+		context.JSON(http.StatusAccepted, gin.H{"deleted": id})
+	}
 }
